@@ -1,4 +1,4 @@
-package simple_input_output
+package simple_input_output.fourty_two
 
 /**
  * Created by peterjmyers on 11/10/16.
@@ -46,7 +46,7 @@ class DatabaseAdmin extends Actor {
   var name = "No name"
   def createRandomNumbers(): Unit = {
     val r = scala.util.Random
-    val pw = new PrintWriter(new File("src/main/scala/simple_input_output/life_universe_everything/database.txt"))
+    val pw = new PrintWriter(new File("src/main/scala/simple_input_output/fourty_two/database.txt"))
     for (i <- 0 until 1000) {
       pw.write(r.nextInt(100) + "\n")
     }
@@ -70,8 +70,8 @@ class DatabaseAdmin extends Actor {
 class Analyst extends Actor {
   var name = "No name"
   def readFile(): Unit = {
-    val filename = "src/main/scala/simple_input_output/life_universe_everything/database.txt"
-    val pw = new PrintWriter(new File("src/main/scala/simple_input_output/life_universe_everything/analysis.txt"))
+    val filename = "src/main/scala/simple_input_output/fourty_two/database.txt"
+    val pw = new PrintWriter(new File("src/main/scala/simple_input_output/fourty_two/analysis.txt"))
     try {
       for (line <- Source.fromFile(filename).getLines) {
         if (line == "42") throw AllDone

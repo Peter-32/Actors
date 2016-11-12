@@ -1,15 +1,15 @@
-package simple_input_output
+package simple_input_output.primes
 
-import java.io._
 import java.util.Scanner
 
 import akka.actor._
+import java.io._
+import scala.io.Source
+import akka.util.Timeout
 import akka.pattern.ask
 import akka.util.Timeout
-
-import scala.concurrent.Await
+import scala.concurrent.{Await, ExecutionContext, Future}
 import scala.concurrent.duration._
-import scala.io.Source
 import scala.language.postfixOps
 
 
@@ -22,13 +22,12 @@ case class Name(name: String)
 
 
 object AllDone extends Exception { }
-/Users/peterjmyers/IdeaProjects/Actors_NeuralNetworks_FullTextAnalysis/src/main/scala/simple_input_output/primes/Primes.scala
 
 class Manager extends Actor {
   def receive = {
     case RecruitSecretary(name) =>
-      val databaseAdmin = context.actorOf(Props[Secretary], name = s"$name")
-      databaseAdmin ! Name(name)
+      val secretary = context.actorOf(Props[Secretary], name = s"$name")
+      secretary ! Name(name)
     case RecruitAnalyst(name) =>
       val analyst = context.actorOf(Props[Analyst], name = s"$name")
       analyst ! Name(name)
@@ -124,8 +123,8 @@ class Analyst extends Actor {
     var firstLine=true
     var searches = 0 // declare
     try {
-      for (line <- Source.fromFile(filename).getLines) {
-        if (firstLine) {
+      for (line <- Source.fromFile(filename).getLines) { // imagining the file might have additional lines in a real world situation
+        if (firstLine) {                                 // so the searches variable is used to know how many lines to read
           searches = Integer.parseInt(line)
           firstLine = false
         } else {
