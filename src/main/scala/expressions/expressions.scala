@@ -46,23 +46,23 @@ class Analyst extends Actor {
   def convertToPostfix(): Unit = {
 
     def expressionToPostfix(line: String): String = {
-      var line_ = line.replace(" ","").trim() // remove spaces and trim, just in case
+      val line_ = line.replace(" ","").trim() // remove spaces and trim, just in case
       var expression: String = ""
       var invalid = false
       val parenthesesStack = new util.Stack[Char]
       val operatorStack = new util.Stack[Char]
       try {
-        for (idx <- 0 until line.length) {
-          line(idx) match {
+        for (idx <- 0 until line_.length) {
+          line_(idx) match {
             case ')' => // pop the last operator and put it in the expression.  Pop the last parentheses
               parenthesesStack.pop()
               expression = expression + operatorStack.pop().toString
             case '(' => // push the parentheses into the stack
-              parenthesesStack.push(line(idx))
+              parenthesesStack.push(line_(idx))
             case '+' | '-' | '*' | '/' | '^' => //push onto the operator stack
-              operatorStack.push(line(idx))
+              operatorStack.push(line_(idx))
             case it if '0' until '9' + 1 contains it => // put these in the expression right away
-              expression = expression + line(idx).toString
+              expression = expression + line_(idx).toString
             case _ => invalid = true
           }
         }
@@ -110,30 +110,63 @@ class Analyst extends Actor {
   // Purpose: Compute the answer to a postfix expression
   def computePostfixExpressions(): Unit = {
 
-    def computePostfix(line: String): Int = {
-      for (idx <- 0 until line.length) {
-        line(idx) match {
-            
-          case it if 0 until 10 contains it =>
-          case _ =>
+    def computePostfix(line: String): Double = {
+      val numbersStack = new util.Stack[Double]
+      var invalid = false
+      var finalAnswer: Double = 0.0
+      var answer: Double = 0.0
+      var num1: Double = 0.0
+      var num2: Double = 0.0
+
+      try {
+        for (idx <- 0 until line.length) {
+          line(idx) match {
+            // if an operator, do a computation and place the result in the numbers stack
+            case '+' =>
+              answer = numbersStack.pop + numbersStack.pop
+              numbersStack.push(answer)
+            case '-' =>
+              answer = numbersStack.pop - numbersStack.pop
+              numbersStack.push(answer)
+            case '*' =>
+              answer = numbersStack.pop * numbersStack.pop
+              numbersStack.push(answer)
+            case '/' =>
+              answer = numbersStack.pop / numbersStack.pop
+              numbersStack.push(answer)
+            case '^' =>
+              num2 = numbersStack.pop
+              num1 = numbersStack.pop
+              answer = Math.pow(num1, num2)
+              numbersStack.push(answer)
+            case it if '0' until '9'+1 contains it => // place the number in the stack
+              numbersStack.push(line(idx).asDigit)
+            case _ => invalid = true
+              println("Invalid: " + line(idx))
+          }
         }
+        finalAnswer = numbersStack.pop
+      } catch {
+        case e: EmptyStackException =>
+          finalAnswer = 0.0
+          e.printStackTrace()
+        case e: Exception => e.printStackTrace()
+        case _: Throwable =>
       }
 
+      if (invalid) {
+        finalAnswer = 0.0
+      }
 
-
-      // cast to int .toInt at end
-      1
-
-
-
+      finalAnswer
     }
 
     val filename = "src/main/scala/expressions/postfix.txt"
     val pw = new PrintWriter(new File("src/main/scala/expressions/postfix_computation.txt"))
     try {
       for (line <- Source.fromFile(filename).getLines) {
-        var answer = computePostfix()
-        pw.write(answer+"\n")
+        var finalAnswer = computePostfix(line)
+        pw.write(finalAnswer +"\n")
       }
     } catch {
       case e: Exception => e.printStackTrace()
