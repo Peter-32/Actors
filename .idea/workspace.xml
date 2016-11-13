@@ -48,36 +48,42 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="substring.scala" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/scala/simple_input_output/substring/substring.scala">
+      <file leaf-file-name="postfix.txt" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/scala/expressions/postfix.txt">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="1857" max-vertical-offset="2610">
-              <caret line="168" column="1" selection-start-line="1" selection-start-column="0" selection-end-line="168" selection-end-column="1" />
-              <folding>
-                <element signature="e#39#63#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="expressions.scala" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/scala/expressions/expressions.scala">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="3090">
+            <state vertical-scroll-proportion="0.0" vertical-offset="15" max-vertical-offset="165">
               <caret line="1" column="0" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="next_palindrome.scala" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/scala/next_palindrome/next_palindrome.scala">
+      <file leaf-file-name="expressions.scala" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/scala/expressions/expressions.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-5.2222223" vertical-offset="294" max-vertical-offset="2685">
-              <caret line="29" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="173" selection-end-column="1" />
-              <folding>
-                <element signature="e#73#97#0" expanded="true" />
-              </folding>
+            <state vertical-scroll-proportion="0.33467743" vertical-offset="2729" max-vertical-offset="3225">
+              <caret line="204" column="34" selection-start-line="204" selection-start-column="34" selection-end-line="204" selection-end-column="34" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="input.txt" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/scala/expressions/input.txt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="165">
+              <caret line="0" column="1" selection-start-line="0" selection-start-column="1" selection-end-line="0" selection-end-column="1" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="postfix_computation.txt" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/scala/expressions/postfix_computation.txt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="165">
+              <caret line="1" column="0" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -94,10 +100,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="secretaryNotes.txt" pinned="false" current-in-tab="true">
+      <file leaf-file-name="secretaryNotes.txt" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/scala/next_palindrome_many_digits/secretaryNotes.txt">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.1552795" vertical-offset="0" max-vertical-offset="483">
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="195">
               <caret line="5" column="4" selection-start-line="5" selection-start-column="4" selection-end-line="5" selection-end-column="4" />
               <folding />
             </state>
@@ -137,8 +143,6 @@
         <option value="$PROJECT_DIR$/src/main/scala/simple_input_output/substring/secretaryNotes.txt" />
         <option value="$PROJECT_DIR$/src/main/scala/simple_input_output/primes/Primes.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/expressions/postfix.txt" />
-        <option value="$PROJECT_DIR$/src/main/scala/expressions/expressions.scala" />
-        <option value="$PROJECT_DIR$/src/main/scala/expressions/input.txt" />
         <option value="$PROJECT_DIR$/src/main/scala/simple_input_output/substring/substring.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/next_palindrome/next_palindrome.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/next_palindrome/analysis.txt" />
@@ -146,6 +150,8 @@
         <option value="$PROJECT_DIR$/src/main/scala/next_palindrome_many_digits/analysis.txt" />
         <option value="$PROJECT_DIR$/src/main/scala/Worksheet.sc" />
         <option value="$PROJECT_DIR$/src/main/scala/next_palindrome_many_digits/next_palindrome_many_digits.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/expressions/expressions.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/expressions/input.txt" />
       </list>
     </option>
   </component>
@@ -649,7 +655,7 @@
       <recent name="simple_input_output.substring" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.Main5">
+  <component name="RunManager" selected="Application.Main3 (1)">
     <configuration default="false" name="Main2 (1)" type="Application" factoryName="Application" temporary="true">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
         <pattern>
@@ -970,10 +976,10 @@
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="Application.Main5" />
-        <item index="1" class="java.lang.String" itemvalue="Application.Main4" />
-        <item index="2" class="java.lang.String" itemvalue="Application.Main3 (1)" />
-        <item index="3" class="java.lang.String" itemvalue="Application.Main3" />
+        <item index="0" class="java.lang.String" itemvalue="Application.Main3 (1)" />
+        <item index="1" class="java.lang.String" itemvalue="Application.Main3" />
+        <item index="2" class="java.lang.String" itemvalue="Application.Main5" />
+        <item index="3" class="java.lang.String" itemvalue="Application.Main4" />
         <item index="4" class="java.lang.String" itemvalue="Application.Main2 (1)" />
       </list>
     </recent_temporary>
@@ -1041,7 +1047,7 @@
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.21814255" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3290653" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3290653" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -1251,38 +1257,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/expressions/postfix.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="135">
-          <caret line="2" column="8" selection-start-line="2" selection-start-column="8" selection-end-line="2" selection-end-column="8" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/expressions/input.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="135">
-          <caret line="3" column="20" selection-start-line="3" selection-start-column="20" selection-end-line="3" selection-end-column="20" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/expressions/postfix_computation.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="135">
-          <caret line="3" column="0" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/expressions/expressions.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="3090">
-          <caret line="1" column="0" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/scala/simple_input_output/substring/substring.scala">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="1857" max-vertical-offset="2610">
@@ -1387,8 +1361,40 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/scala/next_palindrome_many_digits/secretaryNotes.txt">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.1552795" vertical-offset="0" max-vertical-offset="483">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="195">
           <caret line="5" column="4" selection-start-line="5" selection-start-column="4" selection-end-line="5" selection-end-column="4" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/expressions/postfix.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="15" max-vertical-offset="165">
+          <caret line="1" column="0" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/expressions/postfix_computation.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="165">
+          <caret line="1" column="0" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/expressions/input.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="496">
+          <caret line="0" column="1" selection-start-line="0" selection-start-column="1" selection-end-line="0" selection-end-column="1" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/expressions/expressions.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.33467743" vertical-offset="2729" max-vertical-offset="3225">
+          <caret line="204" column="34" selection-start-line="204" selection-start-column="34" selection-end-line="204" selection-end-column="34" />
           <folding />
         </state>
       </provider>

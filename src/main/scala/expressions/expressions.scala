@@ -95,9 +95,14 @@ class Analyst extends Actor {
           firstLine = false
         } else {
           pw.write(expressionToPostfix(line)+"\n")
+          rows-=1
+          if (rows<=0) {
+            throw AllDone
+          }
         }
       }
     } catch {
+      case AllDone =>
       case e: Exception => e.printStackTrace()
       case _: Throwable =>
     } finally {
@@ -126,13 +131,17 @@ class Analyst extends Actor {
               answer = numbersStack.pop + numbersStack.pop
               numbersStack.push(answer)
             case '-' =>
-              answer = numbersStack.pop - numbersStack.pop
+              num2 = numbersStack.pop
+              num1 = numbersStack.pop
+              answer = num1 - num2
               numbersStack.push(answer)
             case '*' =>
               answer = numbersStack.pop * numbersStack.pop
               numbersStack.push(answer)
             case '/' =>
-              answer = numbersStack.pop / numbersStack.pop
+              num2 = numbersStack.pop
+              num1 = numbersStack.pop
+              answer = num1 / num2
               numbersStack.push(answer)
             case '^' =>
               num2 = numbersStack.pop
