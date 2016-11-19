@@ -10,6 +10,7 @@ import java.util.{EmptyStackException, Scanner}
 import akka.actor.Actor.Receive
 import akka.actor._
 import java.io._
+import scala.collection.mutable
 import scala.io.Source
 import akka.util.Timeout
 import akka.pattern.ask
@@ -39,6 +40,32 @@ class Manager extends Actor {
 
 class Analyst extends Actor {
   var name = "No name"
+
+  def longNumberMultiplySingleDigit(num1: String, num2: Char): String = {
+    var remainder = 0
+    var columnAnswer = 0
+    var finalAnswer = ""
+    for (idx <- (num1.length-1) to 0 by -1) {
+      columnAnswer = (num1(idx).asDigit * num2.asDigit) + remainder
+      remainder = (columnAnswer/10) % 10
+      //println(remainder)
+      finalAnswer = (columnAnswer % 10) + finalAnswer
+    }
+    finalAnswer = remainder + finalAnswer
+
+    // remove leading 0s
+    var zeroesFound = 0
+    try {
+
+      for (char <- finalAnswer) {
+        if (char == '0') zeroesFound += 1
+        else throw AllDone
+      }
+    } catch {
+      case AllDone =>
+    }
+    finalAnswer.substring(zeroesFound)
+  }
 
   /**
    * subtracts two numbers of type string.  This works with really large numbers
@@ -85,7 +112,20 @@ class Analyst extends Actor {
    * @param   num2 the second number
    */
   def longNumberMultiply(num1: String, num2: String) = {
-    ???
+    // multiply one character with the whole string
+    var itermAnswers = new mutable.Queue[String]
+    var iterations = 0     // add zero to output each loop through a new num2 digit
+    for (idx <- (num2.length-1) to 0 by -1) {
+
+      itermAnswers += (longNumberMultiplySingleDigit(num1, num2.charAt(idx)) + ("0" * iterations))    // add to the Queue
+    }
+
+    // do addition on all results using a collection
+    var finalAnswer = itermAnswers.dequeue
+    while (!itermAnswers.isEmpty) {
+      finalAnswer = longNumberAddition(finalAnswer, itermAnswers.dequeue)
+    }
+    finalAnswer
   }
 
   /**
@@ -136,12 +176,14 @@ class Analyst extends Actor {
 
     val pw = new PrintWriter(new File(out))
     var output = ""
+    var multiplication: Boolean = false
 
     for (char <- source) {
       char match {
         case x if '0' to '9' by 1 contains x =>
-          output = char.toString * 7
+          if(!multiplication) output = char.toString * 7   // if multiplication is not found yet, duplicate some characters
           pw.write(output)
+        case '*' => multiplication = true    // this helps to make the multiplication questions have a smaller answer
         case _ => pw.write(char)
       }
     }
@@ -162,7 +204,6 @@ class Analyst extends Actor {
     var answer = ""
     var num1 = ""
     var num2 = ""
-    var multiplicationIntermediateStepNumbers: List[String] = List()[String]
 
 
     for (line <- source) {
@@ -185,7 +226,7 @@ class Analyst extends Actor {
 
       // print the results to the output document
       printExpressionFirstThreeLines()
-      if (operator=='*') printMultiplyIntermediateSteps(multiplicationIntermediateStepNumbers)     // for multiply, print the intermediate steps:
+      if (operator=='*') printMultiplicationIntermediateSteps(num1, num2)     // for multiply, print the intermediate steps:
       printExpressionAnswerLine()
 
 
@@ -206,16 +247,31 @@ class Analyst extends Actor {
 
       // write line 2
       difference = maxLength - (num2.length + 1) // +1 for operator length of one
-      pw.write(operator + (" " * difference) + num2 + "\n")
+      pw.write((" " * difference) + operator + num2 + "\n")
 
       // write line 3
       pw.write(("-" * maxLength) + "\n")
     }
 
-    def printMultiplyIntermediateSteps(multiplicationIntermediateStepNumbers: List[String]) = {
+    def printMultiplicationIntermediateSteps(num1: String, num2: String): Unit = {
+      // multiply one character with the whole string
+      var itermAnswers = new mutable.Queue[String]
+      var iterations = 0     // add zero to output each loop through a new num2 digit
+      var difference = 0
+      var term = ""
+      for (idx <- (num2.length-1) to 0 by -1) {
+        itermAnswers += (longNumberMultiplySingleDigit(num1, num2.charAt(idx)) + ("0" * iterations)) // add to the Queue
+      }
 
+      // do addition on all results using a collection
+      while (!itermAnswers.isEmpty) {
+        term = itermAnswers.dequeue
+        difference = maxLength - term.length
+        pw.write((" " * difference) + term)
+      }
+      pw.write(("-" * maxLength) + "\n")
     }
-
+    
     pw.close()
     sender ! "done"
 
@@ -232,125 +288,6 @@ class Analyst extends Actor {
     case _ =>
   }
 }
-
-//
-//
-//class Analyst extends Actor {
-//  var name = "No name"
-//
-//    val filename = "src/main/scala/expressions/input.txt"
-//    val pw = new PrintWriter(new File("src/main/scala/expressions/postfix.txt"))
-//    var firstLine = true
-//    var rows = 0
-//
-//    try {
-//      for (line <- Source.fromFile(filename).getLines) {
-//        if (firstLine) {
-//          rows = Integer.parseInt(line)
-//          firstLine = false
-//        } else {}
-//          rows-=1
-//          if (rows<=0) {
-//            throw AllDone
-//          }
-//        }
-//      }
-//    } catch {
-//      case AllDone =>
-//      case e: Exception => e.printStackTrace()
-//      case _: Throwable =>
-//    } finally {
-//      pw.close()
-//    }
-//
-//  }
-//
-//
-//  // Purpose: Compute the answer to a postfix expression
-//  def computePostfixExpressions(): Unit = {
-//
-//    def computePostfix(line: String): Double = {
-//      val numbersStack = new util.Stack[Double]
-//      var invalid = false
-//      var finalAnswer: Double = 0.0
-//      var answer: Double = 0.0
-//      var num1: Double = 0.0
-//      var num2: Double = 0.0
-//
-//      try {
-//        for (idx <- 0 until line.length) {
-//          line(idx) match {
-//            // if an operator, do a computation and place the result in the numbers stack
-//            case '+' =>
-//              answer = numbersStack.pop + numbersStack.pop
-//              numbersStack.push(answer)
-//            case '-' =>
-//              num2 = numbersStack.pop
-//              num1 = numbersStack.pop
-//              answer = num1 - num2
-//              numbersStack.push(answer)
-//            case '*' =>
-//              answer = numbersStack.pop * numbersStack.pop
-//              numbersStack.push(answer)
-//            case '/' =>
-//              num2 = numbersStack.pop
-//              num1 = numbersStack.pop
-//              answer = num1 / num2
-//              numbersStack.push(answer)
-//            case '^' =>
-//              num2 = numbersStack.pop
-//              num1 = numbersStack.pop
-//              answer = Math.pow(num1, num2)
-//              numbersStack.push(answer)
-//            case it if '0' until '9'+1 contains it => // place the number in the stack
-//              numbersStack.push(line(idx).asDigit)
-//            case _ => invalid = true
-//              println("Invalid: " + line(idx))
-//          }
-//        }
-//        finalAnswer = numbersStack.pop
-//      } catch {
-//        case e: EmptyStackException =>
-//          finalAnswer = 0.0
-//          e.printStackTrace()
-//        case e: Exception => e.printStackTrace()
-//        case _: Throwable =>
-//      }
-//
-//      if (invalid) {
-//        finalAnswer = 0.0
-//      }
-//
-//      finalAnswer
-//    }
-//
-//    val filename = "src/main/scala/expressions/postfix.txt"
-//    val pw = new PrintWriter(new File("src/main/scala/expressions/postfix_computation.txt"))
-//    try {
-//      for (line <- Source.fromFile(filename).getLines) {
-//        var finalAnswer = computePostfix(line)
-//        pw.write(finalAnswer +"\n")
-//      }
-//    } catch {
-//      case e: Exception => e.printStackTrace()
-//      case _: Throwable =>
-//    } finally {
-//      pw.close()
-//    }
-//  }
-//
-//  def receive = {
-//    case Name(name) => this.name = name
-//    case "convert expression input to postfix" => convertToPostfix()
-//      sender ! "conversion is done"
-//    case "compute postfix answers" => computePostfixExpressions()
-//    case str: String => println(str)
-//    case _ =>
-//  }
-//}
-
-
-
 
 object Main6 extends App {
   // an actor needs an ActorSystem
