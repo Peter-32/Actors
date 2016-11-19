@@ -40,16 +40,62 @@ class Manager extends Actor {
 class Analyst extends Actor {
   var name = "No name"
 
+  /**
+   * subtracts two numbers of type string.  This works with really large numbers
+   *
+   * @param   num1 the first number
+   * @param   num2 the second number
+   */
   def longNumberSubtract(num1: String, num2: String) = {
 
   }
-
+  /**
+   * Multiplies two numbers of type string.  This works with really large numbers
+   *
+   * @param   num1 the first number
+   * @param   num2 the second number
+   */
   def longNumberMultiply(num1: String, num2: String) = {
 
   }
 
+  /**
+   * Adds two numbers of type string together.  This works with really large numbers
+   *
+   * @param   num1 the first number
+   * @param   num2 the second number
+   */
   def longNumberAddition(num1: String, num2: String) = {
-    num1.charAt(num1.length-1).toInt + num2.charAt(num2.length-1).toInt
+    var num1_ = num1
+    var num2_ = num2
+    var carryOne = false
+    var finalAnswer = ""
+
+    // build the strings up to be the same size using leading 0s
+    val difference = Math.abs(num1_.length - num2_.length)
+    if (num1_.length < num2_.length) {
+      num1_ = ("0" * difference) + num1_
+    } else if (num1_.length > num2_.length) {
+      num2_ = ("0" * difference) + num2_
+    } else {
+      // do nothing
+    }
+
+    // get the answer by looking at one column at a time
+    for (i <- (num1_.length-1) to 0 by -1) {
+      // get the answer for the column
+      var columnAnswer = num1_.charAt(i).asDigit +
+        num2_.charAt(i).asDigit +
+        (if (carryOne) 1 else 0)
+
+      carryOne = columnAnswer > 9 // do we need to carry one for the next iteration?
+      finalAnswer = (columnAnswer % 10) + finalAnswer
+    }
+
+    // check for final carryOne
+    if (carryOne) finalAnswer = "1" + finalAnswer
+
+    finalAnswer
   }
 
   def makeBiggerNumbers(): Unit = {
@@ -82,19 +128,29 @@ class Analyst extends Actor {
 
     val pw = new PrintWriter(new File(out))
     val source = Source.fromFile(in).getLines().toList
-    var symbol = '_'
+    var operator = '_': Char
 
 
     for (line <- source) {
       // pattern match to get num1, symbol, and num2
       val pattern = "([0-9]+)(\\*|-|\\+)([0-9]+)".r
-      val pattern(num1, symbol, num2) = "1124-9929121"
+      val pattern(num1, operatorString, num2) = line
+      operator = operatorString.charAt(0)
+
+      // get the answer
+      val answer: String = operator match {
+        case 's' => longNumberSubtract(num1, num2).toString
+        case 'm' => longNumberMultiply(num1, num2).toString
+        case '+' | '*' | '-' => longNumberAddition(num1, num2)
+        case _ => "0"
+      }
 
       // set up variables
       val expressionLine1Length = num1.length
-      val expressionLine2Length = num2.length + 1 // plus one for the symbol
-      val maxLength = Math.max(expressionLine1Length, expressionLine2Length)
+      val expressionLine2Length = num2.length + 1 // plus one for the operator
       var expressionString = ""
+      var maxLength = Math.max(expressionLine1Length, expressionLine2Length)
+      maxLength = Math.max(maxLength, answer.length)
       var difference = 0
 
       // get line 1
@@ -103,19 +159,16 @@ class Analyst extends Actor {
 
       // get line 2
       difference = maxLength - expressionLine2Length
-      expressionString = expressionString + symbol + (" " * difference) + num2 + "\n"
+      expressionString = expressionString + operator + (" " * difference) + num2 + "\n"
+
+      // get line 3
       expressionString = expressionString + ("-" * maxLength) + "\n"
 
-      // get the answer
-      val answer = symbol match {
-        case '-' => longNumberSubtract(num1, num2)
-        case '*' => longNumberMultiply(num1, num2)
-        case '+' => longNumberAddition(num1, num2)
-        case _ => 0
-      }
+      // get line 4
+      difference  = maxLength - answer.length
+      expressionString = expressionString + (" " * difference) + answer + "\n\n"
 
-      // add a new line
-
+      // print output
       pw.write(expressionString) // write out the expression
     }
 
