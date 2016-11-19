@@ -47,7 +47,7 @@ class Analyst extends Actor {
    * @param   num2 the second number
    */
   def longNumberSubtract(num1: String, num2: String) = {
-
+    ???
   }
   /**
    * Multiplies two numbers of type string.  This works with really large numbers
@@ -56,7 +56,7 @@ class Analyst extends Actor {
    * @param   num2 the second number
    */
   def longNumberMultiply(num1: String, num2: String) = {
-
+    ???
   }
 
   /**
@@ -139,8 +139,8 @@ class Analyst extends Actor {
 
       // get the answer
       val answer: String = operator match {
-        case 's' => longNumberSubtract(num1, num2).toString
-        case 'm' => longNumberMultiply(num1, num2).toString
+        case 's' => longNumberSubtract(num1, num2).toString    // UPDATE THIS TO USE SUBTRACT ???
+        case 'm' => longNumberMultiply(num1, num2).toString    // UPDATE THIS TO USE MULTIPLY ???
         case '+' | '*' | '-' => longNumberAddition(num1, num2)
         case _ => "0"
       }
