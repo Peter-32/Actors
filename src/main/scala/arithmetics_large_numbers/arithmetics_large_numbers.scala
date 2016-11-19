@@ -47,7 +47,36 @@ class Analyst extends Actor {
    * @param   num2 the second number
    */
   def longNumberSubtract(num1: String, num2: String) = {
-    ???
+    var num1_ = num1
+    var num2_ = num2
+    var carryOne = false
+    var finalAnswer = ""
+
+    // build the strings up to be the same size using leading 0s
+    val difference = Math.abs(num1_.length - num2_.length)
+    if (num1_.length < num2_.length) {
+      num1_ = ("0" * difference) + num1_
+    } else if (num1_.length > num2_.length) {
+      num2_ = ("0" * difference) + num2_
+    } else {
+      // do nothing
+    }
+
+    // get the answer by looking at one column at a time
+    for (i <- (num1_.length-1) to 0 by -1) {
+      // get the answer for the column
+      var columnAnswer = num1_.charAt(i).asDigit -
+        num2_.charAt(i).asDigit -
+        (if (carryOne) 1 else 0)
+
+      carryOne = columnAnswer < 0 // do we need to carry one for the next iteration?
+      finalAnswer = (if (columnAnswer < 0) (10 + columnAnswer) else columnAnswer) + finalAnswer // this is a string
+    }
+
+    // check for final carryOne, if so, make it a negative answer with a minus sign
+    if (carryOne) finalAnswer = "-" + finalAnswer
+
+    finalAnswer
   }
   /**
    * Multiplies two numbers of type string.  This works with really large numbers
@@ -129,6 +158,11 @@ class Analyst extends Actor {
     val pw = new PrintWriter(new File(out))
     val source = Source.fromFile(in).getLines().toList
     var operator = '_': Char
+    var maxLength = 0
+    var answer = ""
+    var num1 = ""
+    var num2 = ""
+    var multiplicationIntermediateStepNumbers: List[String] = List()[String]
 
 
     for (line <- source) {
@@ -138,52 +172,49 @@ class Analyst extends Actor {
       operator = operatorString.charAt(0)
 
       // get the answer
-      val answer: String = operator match {
-        case 's' => longNumberSubtract(num1, num2).toString    // UPDATE THIS TO USE SUBTRACT ???
+      answer = operator match {
+        case '-' => longNumberSubtract(num1, num2)
         case 'm' => longNumberMultiply(num1, num2).toString    // UPDATE THIS TO USE MULTIPLY ???
-        case '+' | '*' | '-' => longNumberAddition(num1, num2)
+        case '+' | '*' => longNumberAddition(num1, num2)
         case _ => "0"
       }
 
-      // set up variables
-      val expressionLine1Length = num1.length
-      val expressionLine2Length = num2.length + 1 // plus one for the operator
-      var expressionString = ""
-      var maxLength = Math.max(expressionLine1Length, expressionLine2Length)
+      // set up variable maxLength.  This is used for column alignment in the output
+      maxLength = Math.max(num1.length, num2.length + 1) // +1 for operator length of one
       maxLength = Math.max(maxLength, answer.length)
-      var difference = 0
 
-      // get line 1
-      difference = maxLength - expressionLine1Length
-      expressionString = (" " * difference) + num1 + "\n"
+      // print the results to the output document
+      printExpressionFirstThreeLines()
+      if (operator=='*') printMultiplyIntermediateSteps(multiplicationIntermediateStepNumbers)     // for multiply, print the intermediate steps:
+      printExpressionAnswerLine()
 
-      // get line 2
-      difference = maxLength - expressionLine2Length
-      expressionString = expressionString + operator + (" " * difference) + num2 + "\n"
 
-      // get line 3
-      expressionString = expressionString + ("-" * maxLength) + "\n"
-
-      // get line 4
-      difference  = maxLength - answer.length
-      expressionString = expressionString + (" " * difference) + answer + "\n\n"
-
-      // print output
-      pw.write(expressionString) // write out the expression
     }
 
 
 
+    def printExpressionAnswerLine() = {
+      // get line 4
+      val difference  = maxLength - answer.length
+      pw.write((" " * difference) + answer + "\n\n")
+    }
 
-//    for (char <- source) {
-//      char match {
-//        case '-' | '+' | '*' =>
-//          symbol = char
-//          pw.write("\n")
-//          pw.write(char)
-//        case _ => pw.write(char)
-//      }
-//    }
+    def printExpressionFirstThreeLines() = {
+      // write line 1
+      var difference = maxLength - num1.length
+      pw.write((" " * difference) + num1 + "\n")
+
+      // write line 2
+      difference = maxLength - (num2.length + 1) // +1 for operator length of one
+      pw.write(operator + (" " * difference) + num2 + "\n")
+
+      // write line 3
+      pw.write(("-" * maxLength) + "\n")
+    }
+
+    def printMultiplyIntermediateSteps(multiplicationIntermediateStepNumbers: List[String]) = {
+
+    }
 
     pw.close()
     sender ! "done"
