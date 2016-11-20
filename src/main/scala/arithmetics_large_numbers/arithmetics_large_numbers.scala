@@ -19,11 +19,6 @@ import scala.concurrent.{Await, ExecutionContext, Future}
 import scala.concurrent.duration._
 import scala.language.postfixOps
 
-// the subtraction is not right for negative numbers.  Needs work to swap
-// 90 minus 100 at end   22 - 12 = -10
-
-
-
 /**
  * Created by peterjmyers on 11/11/16.
  */
@@ -46,12 +41,13 @@ class Analyst extends Actor {
   var name = "No name"
 
   /**
-   * subtracts two numbers of type string.  This works with really large numbers
+   * subtracts two numbers of type string.  This works with really large numbers.
+   * num1 - num2
    *
    * @param   num1 the first number
    * @param   num2 the second number
    */
-  def longNumberSubtract(num1: String, num2: String) = {
+  def longNumberSubtract(num1: String, num2: String, secondRun: Boolean): String = {
     var num1_ = num1
     var num2_ = num2
     var carryOne = false
@@ -78,8 +74,28 @@ class Analyst extends Actor {
       finalAnswer = (if (columnAnswer < 0) (10 + columnAnswer) else columnAnswer) + finalAnswer // this is a string
     }
 
-    // check for final carryOne, if so, make it a negative answer with a minus sign
-    if (carryOne) finalAnswer = "-" + finalAnswer
+    if (carryOne && !secondRun) {
+      finalAnswer = longNumberSubtract("1" + ("0" * finalAnswer.size), finalAnswer, true)
+    }
+
+    // remove leading 0s
+    var zeroesFound = 0
+    try {
+
+      for (char <- finalAnswer) {
+        if (char == '0') zeroesFound += 1
+        else throw AllDone
+      }
+    } catch {
+      case AllDone =>
+    }
+    finalAnswer = finalAnswer.substring(zeroesFound)
+
+    // Recursive call if negative number
+    // It's much simpler to just find the larger number and subtract the smaller one, then put a negative sign on it.
+    if(secondRun) {
+      finalAnswer = "-" + finalAnswer // add neg sign
+    }
 
     finalAnswer
   }
@@ -198,6 +214,7 @@ class Analyst extends Actor {
   def doWork() {
 
     val in = "src/main/scala/arithmetics_large_numbers/intermediate_step.txt"
+    //val in = "src/main/scala/arithmetics_large_numbers/input.txt"
     val out = "src/main/scala/arithmetics_large_numbers/output.txt"
 
     val pw = new PrintWriter(new File(out))
@@ -219,7 +236,7 @@ class Analyst extends Actor {
 
       // get the answer
       answer = operator match {
-        case '-' => longNumberSubtract(num1, num2)
+        case '-' => longNumberSubtract(num1, num2, false)
         case '*' => longNumberMultiply(num1, num2).toString    // UPDATE THIS TO USE MULTIPLY ???
         case '+' => longNumberAddition(num1, num2)
         case _ => "0"
@@ -265,16 +282,16 @@ class Analyst extends Actor {
       var difference = 0
       var term = ""
       for (idx <- (num2.length-1) to 0 by -1) {
-        itermAnswers += (longNumberMultiplySingleDigit(num1, num2.charAt(idx)) + ("0" * iterations)) // add to the Queue
+        itermAnswers += (longNumberMultiplySingleDigit(num1, num2.charAt(idx))) // add to the Queue
       }
 
       // do addition on all results using a collection
       var i = 0   // store number of loops
       while (!itermAnswers.isEmpty) {
-        i += 1  // iteration
         term = itermAnswers.dequeue
         difference = maxLength - term.length
         pw.write((" " * (difference - i)) + term + "\n")
+        i += 1  // iteration
       }
       pw.write(("-" * maxLength) + "\n")
     }
