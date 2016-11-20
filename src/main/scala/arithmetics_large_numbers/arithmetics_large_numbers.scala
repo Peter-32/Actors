@@ -19,6 +19,10 @@ import scala.concurrent.{Await, ExecutionContext, Future}
 import scala.concurrent.duration._
 import scala.language.postfixOps
 
+// the subtraction is not right for negative numbers.  Needs work to swap
+// 90 minus 100 at end   22 - 12 = -10
+
+
 
 /**
  * Created by peterjmyers on 11/11/16.
@@ -40,32 +44,6 @@ class Manager extends Actor {
 
 class Analyst extends Actor {
   var name = "No name"
-
-  def longNumberMultiplySingleDigit(num1: String, num2: Char): String = {
-    var remainder = 0
-    var columnAnswer = 0
-    var finalAnswer = ""
-    for (idx <- (num1.length-1) to 0 by -1) {
-      columnAnswer = (num1(idx).asDigit * num2.asDigit) + remainder
-      remainder = (columnAnswer/10) % 10
-      //println(remainder)
-      finalAnswer = (columnAnswer % 10) + finalAnswer
-    }
-    finalAnswer = remainder + finalAnswer
-
-    // remove leading 0s
-    var zeroesFound = 0
-    try {
-
-      for (char <- finalAnswer) {
-        if (char == '0') zeroesFound += 1
-        else throw AllDone
-      }
-    } catch {
-      case AllDone =>
-    }
-    finalAnswer.substring(zeroesFound)
-  }
 
   /**
    * subtracts two numbers of type string.  This works with really large numbers
@@ -105,6 +83,33 @@ class Analyst extends Actor {
 
     finalAnswer
   }
+
+  def longNumberMultiplySingleDigit(num1: String, num2: Char): String = {
+    var remainder = 0
+    var columnAnswer = 0
+    var finalAnswer = ""
+    for (idx <- (num1.length-1) to 0 by -1) {
+      columnAnswer = (num1(idx).asDigit * num2.asDigit) + remainder
+      remainder = (columnAnswer/10) % 10
+      finalAnswer = (columnAnswer % 10) + finalAnswer
+    }
+    finalAnswer = remainder + finalAnswer
+
+    // remove leading 0s
+    var zeroesFound = 0
+    try {
+
+      for (char <- finalAnswer) {
+        if (char == '0') zeroesFound += 1
+        else throw AllDone
+      }
+    } catch {
+      case AllDone =>
+    }
+    finalAnswer.substring(zeroesFound)
+  }
+
+
   /**
    * Multiplies two numbers of type string.  This works with really large numbers
    *
@@ -116,8 +121,8 @@ class Analyst extends Actor {
     var itermAnswers = new mutable.Queue[String]
     var iterations = 0     // add zero to output each loop through a new num2 digit
     for (idx <- (num2.length-1) to 0 by -1) {
-
       itermAnswers += (longNumberMultiplySingleDigit(num1, num2.charAt(idx)) + ("0" * iterations))    // add to the Queue
+      iterations += 1
     }
 
     // do addition on all results using a collection
@@ -181,9 +186,7 @@ class Analyst extends Actor {
     for (char <- source) {
       char match {
         case x if '0' to '9' by 1 contains x =>
-          if(!multiplication) output = char.toString * 7   // if multiplication is not found yet, duplicate some characters
-          pw.write(output)
-        case '*' => multiplication = true    // this helps to make the multiplication questions have a smaller answer
+          pw.write(char.toString * 7)   // if multiplication is not found yet, duplicate some characters
         case _ => pw.write(char)
       }
     }
@@ -209,14 +212,16 @@ class Analyst extends Actor {
     for (line <- source) {
       // pattern match to get num1, symbol, and num2
       val pattern = "([0-9]+)(\\*|-|\\+)([0-9]+)".r
-      val pattern(num1, operatorString, num2) = line
+      val pattern(num1String, operatorString, num2String) = line
+      num1 = num1String
+      num2 = num2String
       operator = operatorString.charAt(0)
 
       // get the answer
       answer = operator match {
         case '-' => longNumberSubtract(num1, num2)
-        case 'm' => longNumberMultiply(num1, num2).toString    // UPDATE THIS TO USE MULTIPLY ???
-        case '+' | '*' => longNumberAddition(num1, num2)
+        case '*' => longNumberMultiply(num1, num2).toString    // UPDATE THIS TO USE MULTIPLY ???
+        case '+' => longNumberAddition(num1, num2)
         case _ => "0"
       }
 
@@ -264,14 +269,16 @@ class Analyst extends Actor {
       }
 
       // do addition on all results using a collection
+      var i = 0   // store number of loops
       while (!itermAnswers.isEmpty) {
+        i += 1  // iteration
         term = itermAnswers.dequeue
         difference = maxLength - term.length
-        pw.write((" " * difference) + term)
+        pw.write((" " * (difference - i)) + term + "\n")
       }
       pw.write(("-" * maxLength) + "\n")
     }
-    
+
     pw.close()
     sender ! "done"
 
