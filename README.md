@@ -1,3 +1,5 @@
-# Actors_NeuralNetworks_FullTextAnalysis
+# Actors
 
-Solving problems using actors, neural networks, and full text analysis.
+The documentation isn't complete.
+
+This is just a few scala documents in which I was experimenting with Actors.  The abstraction of actors make concurrent programming much simpler.
